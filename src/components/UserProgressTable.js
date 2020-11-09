@@ -1,58 +1,71 @@
 import React from 'react';
 import PropTypes from 'utils/propTypes';
+import {connect} from 'react-redux'
 
 import { Table, Progress } from 'reactstrap';
 
 import Avatar from 'components/Avatar';
 
 import withBadge from 'hocs/withBadge';
+import {
+  MdAccountBox,MdSentimentVerySatisfied
 
-const AvatarWithBadge = withBadge({
-  position: 'bottom-right',
-  color: 'success',
-})(Avatar);
+} from 'react-icons/md';
 
-const UserProgressTable = ({ headers, usersData, ...restProps }) => {
+
+class UserProgressTable extends React.Component{
+  render(){
+    let User = this.props.totolUser;
+    let admin = User.filter((ele) => {
+      if (ele.roles.includes('admin')) {
+        return ele;
+      }
+    });
+ 
   return (
-    <Table responsive hover {...restProps}>
+    <Table responsive>
       <thead>
-        <tr className="text-capitalize align-middle text-center">
-          {headers.map((item, index) => <th key={index}>{item}</th>)}
+        <tr>
+          <th><MdAccountBox  size={32}/></th>
+          <th>Name</th>
+          <th>UserName</th>
+          <th>Email</th>
+          <th>Time</th>
+         
         </tr>
       </thead>
-      <tbody>
-        {usersData.map(({ avatar, name, date, progress }, index) => (
-          <tr key={index}>
-            <td className="align-middle text-center">
-              <AvatarWithBadge src={avatar} />
-            </td>
-            <td className="align-middle text-center">{name}</td>
-            <td className="align-middle text-center">{date}</td>
-            <td className="align-middle text-center">
-              <Progress value={progress} style={{ height: 5 }} />
-            </td>
-            <td className="align-middle text-center">{progress}%</td>
-          </tr>
-        ))}
-      </tbody>
+      {this.props.totolUser.map((ele,)=>{
+       let index=1
+        if(ele.roles.includes('user')){
+          return(
+            <tbody>
+        
+            <tr>
+          <th scope="row"><MdSentimentVerySatisfied  size={25}/></th>
+          <td>{ele.name}</td>
+          <td>{ele.userName}</td>
+          <td>{ele.email}</td>
+          <td>{ele.date}</td>
+           
+            </tr>
+           
+          </tbody>
+          )
+        }
+      })}
+     
     </Table>
   );
+}
+    
+}
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    totolUser:state.totolUser
+  };
 };
 
-UserProgressTable.propTypes = {
-  headers: PropTypes.node,
-  usersData: PropTypes.arrayOf(
-    PropTypes.shape({
-      avatar: PropTypes.string,
-      name: PropTypes.string,
-      date: PropTypes.date,
-    })
-  ),
-};
+export default connect(mapStateToProps )(UserProgressTable);
 
-UserProgressTable.defaultProps = {
-  headers: [],
-  usersData: [],
-};
-
-export default UserProgressTable;

@@ -2,8 +2,25 @@ import logo200Image from 'assets/img/logo/logo_200.png';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import {connect} from 'react-redux'
+import { startLoginUser } from "../client/actions/userAction";
 
 class AuthForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      email: "",
+      password: "",
+      confirmpassword: "",
+     
+    };
+  }
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+  
   get isLogin() {
     return this.props.authState === STATE_LOGIN;
   }
@@ -18,9 +35,38 @@ class AuthForm extends React.Component {
     this.props.onChangeAuthState(authState);
   };
 
+  
   handleSubmit = event => {
+    let formData;
     event.preventDefault();
+   
+     
+    if(this.props.authState === STATE_LOGIN){
+     formData={
+email:this.state.email,
+password:this.state.password,
+
+    }
+    const redirect = () => {
+      if(this.props.authState === STATE_LOGIN){
+       
+          window.location.href ='/dashboard';
+      
+    };
+    
+  }
+ 
+    console.log(formData)
+    
+    this.props.dispatch(startLoginUser(formData,redirect));
+  }
+ console.log(this.props.user)
+ console.log(this.props.totolUser)
+
+
+  
   };
+  
 
   renderButtonText() {
     const { buttonText } = this.props;
@@ -29,12 +75,13 @@ class AuthForm extends React.Component {
       return 'Login';
     }
 
-    if (!buttonText && this.isSignup) {
-      return 'Signup';
-    }
+    // if (!buttonText && this.isSignup) {
+    //   return 'Signup';
+    // }
 
     return buttonText;
   }
+
 
   render() {
     const {
@@ -64,18 +111,23 @@ class AuthForm extends React.Component {
         )}
         <FormGroup>
           <Label for={usernameLabel}>{usernameLabel}</Label>
-          <Input {...usernameInputProps} />
+          <Input name="email"
+              value={this.state.email}
+              onChange={this.handleChange} />
         </FormGroup>
         <FormGroup>
           <Label for={passwordLabel}>{passwordLabel}</Label>
-          <Input {...passwordInputProps} />
+          <Input name="password"
+              value={this.state.password}
+              onChange={this.handleChange}/>
         </FormGroup>
-        {this.isSignup && (
+        
+        {/* {this.isSignup && (
           <FormGroup>
             <Label for={confirmPasswordLabel}>{confirmPasswordLabel}</Label>
             <Input {...confirmPasswordInputProps} />
           </FormGroup>
-        )}
+        )} */}
         <FormGroup check>
           <Label check>
             <Input type="checkbox" />{' '}
@@ -91,7 +143,7 @@ class AuthForm extends React.Component {
           {this.renderButtonText()}
         </Button>
 
-        <div className="text-center pt-1">
+        {/* <div className="text-center pt-1">
           <h6>or</h6>
           <h6>
             {this.isSignup ? (
@@ -104,7 +156,7 @@ class AuthForm extends React.Component {
               </a>
             )}
           </h6>
-        </div>
+        </div> */}
 
         {children}
       </Form>
@@ -148,4 +200,11 @@ AuthForm.defaultProps = {
   onLogoClick: () => {},
 };
 
-export default AuthForm;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    totolUser:state.totolUser
+  };
+};
+
+export default connect(mapStateToProps )(AuthForm);

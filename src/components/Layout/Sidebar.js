@@ -1,4 +1,5 @@
 import logo200Image from 'assets/img/logo/logo_200.png';
+import {connect} from 'react-redux'
 import sidebarBgImage from 'assets/img/sidebar/sidebar-4.jpg';
 import SourceLink from 'components/SourceLink';
 import React from 'react';
@@ -7,6 +8,8 @@ import {
   MdAccountCircle,
   MdArrowDropDownCircle,
   MdBorderAll,
+  MdPeople,
+  MdMood,
   MdBrush,
   MdChromeReaderMode,
   MdDashboard,
@@ -17,6 +20,7 @@ import {
   MdNotificationsActive,
   MdPages,
   MdRadioButtonChecked,
+  MdTransferWithinAStation,
   MdSend,
   MdStar,
   MdTextFields,
@@ -25,6 +29,7 @@ import {
   MdViewList,
   MdWeb,
   MdWidgets,
+  
 } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import {
@@ -42,60 +47,24 @@ const sidebarBackground = {
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
 };
+let  investmentItems;
+let navItems;
+let     withdrawalItems;
 
-const navComponents = [
-  { to: '/buttons', name: 'buttons', exact: false, Icon: MdRadioButtonChecked },
-  {
-    to: '/button-groups',
-    name: 'button groups',
-    exact: false,
-    Icon: MdGroupWork,
-  },
-  { to: '/forms', name: 'forms', exact: false, Icon: MdChromeReaderMode },
-  { to: '/input-groups', name: 'input groups', exact: false, Icon: MdViewList },
-  {
-    to: '/dropdowns',
-    name: 'dropdowns',
-    exact: false,
-    Icon: MdArrowDropDownCircle,
-  },
-  { to: '/badges', name: 'badges', exact: false, Icon: MdStar },
-  { to: '/alerts', name: 'alerts', exact: false, Icon: MdNotificationsActive },
-  { to: '/progress', name: 'progress', exact: false, Icon: MdBrush },
-  { to: '/modals', name: 'modals', exact: false, Icon: MdViewDay },
-];
 
-const navContents = [
-  { to: '/typography', name: 'typography', exact: false, Icon: MdTextFields },
-  { to: '/tables', name: 'tables', exact: false, Icon: MdBorderAll },
-];
 
-const pageContents = [
-  { to: '/login', name: 'login / signup', exact: false, Icon: MdAccountCircle },
-  {
-    to: '/login-modal',
-    name: 'login modal',
-    exact: false,
-    Icon: MdViewCarousel,
-  },
-];
 
-const navItems = [
-  { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
-  { to: '/cards', name: 'cards', exact: false, Icon: MdWeb },
-  { to: '/charts', name: 'charts', exact: false, Icon: MdInsertChart },
-  { to: '/widgets', name: 'widgets', exact: false, Icon: MdWidgets },
-];
 
 const bem = bn.create('sidebar');
 
 class Sidebar extends React.Component {
   state = {
-    isOpenComponents: true,
-    isOpenContents: true,
-    isOpenPages: true,
-  };
+   
+    isOpenInvestment: false,
+    isOpenWithdrawal: false,
+  }
 
+ 
   handleClick = name => () => {
     this.setState(prevState => {
       const isOpen = prevState[`isOpen${name}`];
@@ -105,27 +74,97 @@ class Sidebar extends React.Component {
       };
     });
   };
+  
 
   render() {
+    console.log(this.props.user)
+    {if (this.props.user){
+if(this.props.user.roles){
+      if(this.props.user.roles.includes('superAdmin')){
+    
+         navItems = [
+          { to: '/dashboard', name: 'Super Admin Dashboard', exact: true, Icon: MdDashboard },
+          { to: '/profile', name: 'Profile', exact: false, Icon: MdAccountCircle },
+          { to: '/user', name: 'Users', exact: false, Icon:  MdPeople },
+          { to: '/admin', name: 'Admins', exact: false, Icon:MdMood },
+          { to: '/signup', name: 'Register User', exact: false, Icon: MdChromeReaderMode },
+         
+         
+          { to: '/widgets', name: 'Request', exact: false, Icon: MdSend },
+          { to: '/changePassword', name: 'ChangePassword', exact: false, Icon: MdChromeReaderMode },
+        ];
+        
+    }else if(this.props.user.roles.includes('admin')){
+      navItems = [
+        { to: '/dashboard', name:'Admin Dashboard', exact: true, Icon: MdDashboard },
+        { to: '/profile', name: 'Profile', exact: false, Icon: MdAccountCircle  },
+        { to: '/user', name: 'Users', exact: false, Icon: MdPeople},
+      
+      
+        { to: '/changePassword', name: 'ChangePassword', exact: false, Icon: MdChromeReaderMode },
+      ];
+      investmentItems=[ { to: '/investment', name: ' Totol Investment', exact: false, Icon: MdInsertChart },
+        { to: '/investment', name: 'investment', exact: false, Icon:MdTransferWithinAStation }]
+        withdrawalItems=[ { to: '/investment', name: ' Totol Withdrawal', exact: false, Icon: MdInsertChart },
+        { to: '/withdrawal', name: 'Withdrawal', exact: false, Icon:MdTransferWithinAStation }]
+    } else{
+        navItems = [
+        { to: '/dashboard', name: ' Dashboard', exact: true, Icon: MdDashboard },
+        { to: '/profile', name: 'Profile', exact: false, Icon: MdAccountCircle  },
+     
+       
+        { to: '/widgets', name: 'Request', exact: false, Icon:MdSend},
+        { to: '/changePassword', name: 'ChangePassword', exact: false, Icon: MdChromeReaderMode},
+      ];
+     
+    }
+    }
+  }
+    }
+    console.log(this.props.user)
+    {if (this.props.user){
+if(this.props.user.roles){
+      if(this.props.user.roles.includes('superAdmin')){
+    
+        investmentItems=[ { to: '/investments', name: ' All Investment', exact: false, Icon: MdInsertChart },
+        { to: '/investment', name: 'investment', exact: false, Icon:MdTransferWithinAStation }]
+        withdrawalItems=[ { to: '/withdrawals', name: ' All Withdrawal', exact: false, Icon: MdInsertChart },
+        { to: '/withdrawal', name: 'withdrawal', exact: false, Icon:MdTransferWithinAStation }]
+        
+    }else if(this.props.user.roles.includes('admin')){
+      
+      investmentItems=[ { to: '/investments', name: ' ALL Investment', exact: false, Icon: MdInsertChart },
+        { to: '/investment', name: 'investment', exact: false, Icon:MdTransferWithinAStation }]
+        withdrawalItems=[ { to: '/withdrawals', name: ' ALL Withdrawal', exact: false, Icon: MdInsertChart },
+        { to: '/withdrawal', name: 'Withdrawal', exact: false, Icon:MdTransferWithinAStation }]
+    } else{
+        
+      investmentItems=[ { to: '/investments', name: ' ALL Investment', exact: false, Icon: MdInsertChart },
+      { to: '/investment', name: 'investment', exact: false, Icon:MdTransferWithinAStation }]
+      withdrawalItems=[ { to: '/withdrawals', name: '  ALL Withdrawal', exact: false, Icon: MdInsertChart },
+      { to: '/withdrawal', name: 'Withdrawal', exact: false, Icon:MdTransferWithinAStation }]
+    }
+    }
+  }
+    }
+  
+   
     return (
       <aside className={bem.b()} data-image={sidebarBgImage}>
         <div className={bem.e('background')} style={sidebarBackground} />
         <div className={bem.e('content')}>
           <Navbar>
             <SourceLink className="navbar-brand d-flex">
-              <img
-                src={logo200Image}
-                width="40"
-                height="30"
-                className="pr-2"
-                alt=""
-              />
+              
               <span className="text-white">
-                Reduction <FaGithub />
+                Investment <FaGithub />
               </span>
             </SourceLink>
           </Navbar>
+          { navItems !== undefined && (
+        
           <Nav vertical>
+            
             {navItems.map(({ to, name, exact, Icon }, index) => (
               <NavItem key={index} className={bem.e('nav-item')}>
                 <BSNavLink
@@ -141,101 +180,20 @@ class Sidebar extends React.Component {
                 </BSNavLink>
               </NavItem>
             ))}
-
             <NavItem
               className={bem.e('nav-item')}
-              onClick={this.handleClick('Components')}
-            >
-              <BSNavLink className={bem.e('nav-item-collapse')}>
-                <div className="d-flex">
-                  <MdExtension className={bem.e('nav-item-icon')} />
-                  <span className=" align-self-start">Components</span>
-                </div>
-                <MdKeyboardArrowDown
-                  className={bem.e('nav-item-icon')}
-                  style={{
-                    padding: 0,
-                    transform: this.state.isOpenComponents
-                      ? 'rotate(0deg)'
-                      : 'rotate(-90deg)',
-                    transitionDuration: '0.3s',
-                    transitionProperty: 'transform',
-                  }}
-                />
-              </BSNavLink>
-            </NavItem>
-            <Collapse isOpen={this.state.isOpenComponents}>
-              {navComponents.map(({ to, name, exact, Icon }, index) => (
-                <NavItem key={index} className={bem.e('nav-item')}>
-                  <BSNavLink
-                    id={`navItem-${name}-${index}`}
-                    className="text-uppercase"
-                    tag={NavLink}
-                    to={to}
-                    activeClassName="active"
-                    exact={exact}
-                  >
-                    <Icon className={bem.e('nav-item-icon')} />
-                    <span className="">{name}</span>
-                  </BSNavLink>
-                </NavItem>
-              ))}
-            </Collapse>
-
-            <NavItem
-              className={bem.e('nav-item')}
-              onClick={this.handleClick('Contents')}
-            >
-              <BSNavLink className={bem.e('nav-item-collapse')}>
-                <div className="d-flex">
-                  <MdSend className={bem.e('nav-item-icon')} />
-                  <span className="">Contents</span>
-                </div>
-                <MdKeyboardArrowDown
-                  className={bem.e('nav-item-icon')}
-                  style={{
-                    padding: 0,
-                    transform: this.state.isOpenContents
-                      ? 'rotate(0deg)'
-                      : 'rotate(-90deg)',
-                    transitionDuration: '0.3s',
-                    transitionProperty: 'transform',
-                  }}
-                />
-              </BSNavLink>
-            </NavItem>
-            <Collapse isOpen={this.state.isOpenContents}>
-              {navContents.map(({ to, name, exact, Icon }, index) => (
-                <NavItem key={index} className={bem.e('nav-item')}>
-                  <BSNavLink
-                    id={`navItem-${name}-${index}`}
-                    className="text-uppercase"
-                    tag={NavLink}
-                    to={to}
-                    activeClassName="active"
-                    exact={exact}
-                  >
-                    <Icon className={bem.e('nav-item-icon')} />
-                    <span className="">{name}</span>
-                  </BSNavLink>
-                </NavItem>
-              ))}
-            </Collapse>
-
-            <NavItem
-              className={bem.e('nav-item')}
-              onClick={this.handleClick('Pages')}
+              onClick={this.handleClick('Investment')}
             >
               <BSNavLink className={bem.e('nav-item-collapse')}>
                 <div className="d-flex">
                   <MdPages className={bem.e('nav-item-icon')} />
-                  <span className="">Pages</span>
+                  <span className="">Investment</span>
                 </div>
                 <MdKeyboardArrowDown
                   className={bem.e('nav-item-icon')}
                   style={{
                     padding: 0,
-                    transform: this.state.isOpenPages
+                    transform: this.state. isOpenInvestment
                       ? 'rotate(0deg)'
                       : 'rotate(-90deg)',
                     transitionDuration: '0.3s',
@@ -244,8 +202,8 @@ class Sidebar extends React.Component {
                 />
               </BSNavLink>
             </NavItem>
-            <Collapse isOpen={this.state.isOpenPages}>
-              {pageContents.map(({ to, name, exact, Icon }, index) => (
+            <Collapse isOpen={this.state. isOpenInvestment}>
+              {investmentItems.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>
                   <BSNavLink
                     id={`navItem-${name}-${index}`}
@@ -261,11 +219,61 @@ class Sidebar extends React.Component {
                 </NavItem>
               ))}
             </Collapse>
+            <NavItem
+              className={bem.e('nav-item')}
+              onClick={this.handleClick('Withdrawal')}
+            >
+              <BSNavLink className={bem.e('nav-item-collapse')}>
+                <div className="d-flex">
+                  <MdPages className={bem.e('nav-item-icon')} />
+                  <span className="">Withdrawal</span>
+                </div>
+                <MdKeyboardArrowDown
+                  className={bem.e('nav-item-icon')}
+                  style={{
+                    padding: 0,
+                    transform: this.state.isOpenWithdrawal
+                      ? 'rotate(0deg)'
+                      : 'rotate(-90deg)',
+                    transitionDuration: '0.3s',
+                    transitionProperty: 'transform',
+                  }}
+                />
+              </BSNavLink>
+            </NavItem>
+            <Collapse isOpen={this.state.isOpenWithdrawal}>
+              {withdrawalItems.map(({ to, name, exact, Icon }, index) => (
+                <NavItem key={index} className={bem.e('nav-item')}>
+                  <BSNavLink
+                    id={`navItem-${name}-${index}`}
+                    className="text-uppercase"
+                    tag={NavLink}
+                    to={to}
+                    activeClassName="active"
+                    exact={exact}
+                  >
+                    <Icon className={bem.e('nav-item-icon')} />
+                    <span className="">{name}</span>
+                  </BSNavLink>
+                </NavItem>
+              ))}
+            </Collapse>
+
           </Nav>
+          )}
         </div>
       </aside>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    totolUser:state.totolUser
+  };
+};
 
-export default Sidebar;
+export default connect(mapStateToProps )(Sidebar);
+
+
+ 

@@ -1,4 +1,6 @@
-import { STATE_LOGIN, STATE_SIGNUP } from 'components/AuthForm';
+import { STATE_LOGIN} from 'components/AuthForm';
+import RegisterForm from 'components/RegisterForm';
+import  ChangePasswordForm from 'components/ChangePasswordForm';
 import GAListener from 'components/GAListener';
 import { EmptyLayout, LayoutRoute, MainLayout } from 'components/Layout';
 import PageSpinner from 'components/PageSpinner';
@@ -8,22 +10,22 @@ import componentQueries from 'react-component-queries';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import './styles/reduction.scss';
 
-const AlertPage = React.lazy(() => import('pages/AlertPage'));
+const ProfilePage = React.lazy(() => import('pages/ProfilePage'));
 const AuthModalPage = React.lazy(() => import('pages/AuthModalPage'));
 const BadgePage = React.lazy(() => import('pages/BadgePage'));
 const ButtonGroupPage = React.lazy(() => import('pages/ButtonGroupPage'));
 const ButtonPage = React.lazy(() => import('pages/ButtonPage'));
-const CardPage = React.lazy(() => import('pages/CardPage'));
+const UserPage = React.lazy(() => import('pages/UserPage'));
 const ChartPage = React.lazy(() => import('pages/ChartPage'));
 const DashboardPage = React.lazy(() => import('pages/DashboardPage'));
-const DropdownPage = React.lazy(() => import('pages/DropdownPage'));
+
 const FormPage = React.lazy(() => import('pages/FormPage'));
-const InputGroupPage = React.lazy(() => import('pages/InputGroupPage'));
-const ModalPage = React.lazy(() => import('pages/ModalPage'));
-const ProgressPage = React.lazy(() => import('pages/ProgressPage'));
-const TablePage = React.lazy(() => import('pages/TablePage'));
-const TypographyPage = React.lazy(() => import('pages/TypographyPage'));
-const WidgetPage = React.lazy(() => import('pages/WidgetPage'));
+//const UserDashboardPage = React.lazy(() => import('pages/UserDashboardPage'));
+const InvestmentPage = React.lazy(() => import('pages/InvestmentPage'));
+const WithdrawalPage = React.lazy(() => import('pages/WithdrawalPage'));
+const AdminPage = React.lazy(() => import('pages/AdminPage'));
+const TotolInvestmentPage = React.lazy(() => import('pages/TotolInvestmentPage'));
+const TotolWithdrawalPage = React.lazy(() => import('pages/TotolWithdrawalPage'));
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -37,42 +39,48 @@ class App extends React.Component {
           <Switch>
             <LayoutRoute
               exact
-              path="/login"
+              path="/"
               layout={EmptyLayout}
               component={props => (
                 <AuthPage {...props} authState={STATE_LOGIN} />
               )}
             />
-            <LayoutRoute
+            {/* <LayoutRoute
               exact
               path="/signup"
               layout={EmptyLayout}
               component={props => (
                 <AuthPage {...props} authState={STATE_SIGNUP} />
               )}
-            />
+            /> */}
 
             <MainLayout breakpoint={this.props.breakpoint}>
               <React.Suspense fallback={<PageSpinner />}>
-                <Route exact path="/" component={DashboardPage} />
+                { <Route exact path="/dashboard" component={DashboardPage} /> }
                 <Route exact path="/login-modal" component={AuthModalPage} />
+                <Route
+              exact
+              path="/signup"
+              layout={EmptyLayout}
+              component={RegisterForm}
+            />
                 <Route exact path="/buttons" component={ButtonPage} />
-                <Route exact path="/cards" component={CardPage} />
-                <Route exact path="/widgets" component={WidgetPage} />
-                <Route exact path="/typography" component={TypographyPage} />
-                <Route exact path="/alerts" component={AlertPage} />
-                <Route exact path="/tables" component={TablePage} />
+                <Route exact path="/user" component={UserPage} />
+                <Route exact path="/withdrawals" component={TotolWithdrawalPage} />
+                <Route exact path="/investments" component={TotolInvestmentPage} />
+                <Route exact path="/profile" component={ProfilePage} />
+                <Route exact path="/admin" component={AdminPage} />
                 <Route exact path="/badges" component={BadgePage} />
                 <Route
                   exact
                   path="/button-groups"
                   component={ButtonGroupPage}
                 />
-                <Route exact path="/dropdowns" component={DropdownPage} />
-                <Route exact path="/progress" component={ProgressPage} />
-                <Route exact path="/modals" component={ModalPage} />
+                <Route exact path="/changePassword" component={ChangePasswordForm} />
+                <Route exact path="/withdrawal" component={WithdrawalPage} />
+                <Route exact path="/investment" component={InvestmentPage} />
                 <Route exact path="/forms" component={FormPage} />
-                <Route exact path="/input-groups" component={InputGroupPage} />
+              
                 <Route exact path="/charts" component={ChartPage} />
               </React.Suspense>
             </MainLayout>

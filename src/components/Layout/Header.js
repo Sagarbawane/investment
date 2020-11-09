@@ -1,8 +1,10 @@
 import Avatar from 'components/Avatar';
-import { UserCard } from 'components/Card';
+import {connect}from 'react-redux'
+import ProfileCard  from 'components/Card/ProfileCard';
 import Notifications from 'components/Notifications';
 import SearchInput from 'components/SearchInput';
 import { notificationsData } from 'demos/header';
+import {startLogoutUser} from '../../client/actions/userAction'
 import withBadge from 'hocs/withBadge';
 import React from 'react';
 import {
@@ -49,7 +51,7 @@ class Header extends React.Component {
   state = {
     isOpenNotificationPopover: false,
     isNotificationConfirmed: false,
-    isOpenUserCardPopover: false,
+    isOpenProfileCardPopover: false,
   };
 
   toggleNotificationPopover = () => {
@@ -62,9 +64,9 @@ class Header extends React.Component {
     }
   };
 
-  toggleUserCardPopover = () => {
+  toggleProfileCardPopover = () => {
     this.setState({
-      isOpenUserCardPopover: !this.state.isOpenUserCardPopover,
+      isOpenProfileCardPopover: !this.state.isOpenProfileCardPopover,
     });
   };
 
@@ -74,6 +76,9 @@ class Header extends React.Component {
 
     document.querySelector('.cr-sidebar').classList.toggle('cr-sidebar--open');
   };
+  handleLogout=()=>{
+    this.props.dispatch(startLogoutUser())
+  }
 
   render() {
     const { isNotificationConfirmed } = this.state;
@@ -121,46 +126,32 @@ class Header extends React.Component {
           <NavItem>
             <NavLink id="Popover2">
               <Avatar
-                onClick={this.toggleUserCardPopover}
+                onClick={this.toggleProfileCardPopover}
                 className="can-click"
               />
             </NavLink>
             <Popover
               placement="bottom-end"
-              isOpen={this.state.isOpenUserCardPopover}
-              toggle={this.toggleUserCardPopover}
+              isOpen={this.state.isOpenProfileCardPopover}
+              toggle={this.toggleProfileCardPopover}
               target="Popover2"
               className="p-0 border-0"
               style={{ minWidth: 250 }}
             >
               <PopoverBody className="p-0 border-light">
-                <UserCard
-                  title="Jane"
-                  subtitle="jane@jane.com"
-                  text="Last updated 3 mins ago"
+                <ProfileCard
+                  title={this.props.user.name}
+                  email={this.props.user.email}
+                  date={this.props.user.date}
                   className="border-light"
                 >
                   <ListGroup flush>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdPersonPin /> Profile
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdInsertChart /> Stats
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdMessage /> Messages
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdSettingsApplications /> Settings
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdHelp /> Help
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
+                   
+                    <ListGroupItem tag="button" onClick={this.handleLogout} action className="border-light">
                       <MdExitToApp /> Signout
                     </ListGroupItem>
                   </ListGroup>
-                </UserCard>
+                </ProfileCard>
               </PopoverBody>
             </Popover>
           </NavItem>
@@ -170,4 +161,11 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    totolUser:state.totolUser
+  };
+};
+
+export default connect(mapStateToProps )(Header);
