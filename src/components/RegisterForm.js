@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Label,Select } from 'reactstrap';
 import { connect } from 'react-redux'
 import { startRegisterUser } from "../client/actions/userAction";
 
@@ -33,7 +33,7 @@ class RegisterForm extends React.Component {
       place: "",
 
 
-
+      roles:'',
       userName: "",
       password: "",
       confirmPassword: "",
@@ -44,6 +44,7 @@ class RegisterForm extends React.Component {
       [e.target.name]: e.target.value,
     });
   };
+ 
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -70,7 +71,7 @@ class RegisterForm extends React.Component {
       tds_path: this.state.tds_path,
       agreement_path: this.state.agreement_path,
       place: this.state.place,
-
+       roles:this.state.roles,
       password: this.state.password,
       confirmPassword: this.state.confirmPassword,
     };
@@ -259,21 +260,23 @@ class RegisterForm extends React.Component {
               value={this.state.confirmPassword}
               onChange={this.handleChange} />
           </FormGroup>
+        
 
+      <FormGroup>
+      <Label for="exampleSelect">Roles</Label>
+        <Input type="select" name="roles" id="exampleSelect"
 
+                 onChange={this.handleChange}>
+        
+          <option value='select'>Select</option>
+          <option value='user'>User</option>
+          <option value='admin'>Admin</option>
+          <option value='superAdmin'>SuperAdmin</option>
 
-
-
-
-
-
-          <FormGroup check>
-            <Label check>
-              <Input type="checkbox" />{' '}
-              'Agree the terms and policy' : 'Remember me'
-            </Label>
-          </FormGroup>
-          <hr />
+        </Input>
+      </FormGroup>
+         
+<hr />
           <Button
             size="lg"
             className="bg-gradient-theme-left border-0"

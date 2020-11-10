@@ -213,9 +213,7 @@ status: {
     default: ['enable']
 },
 admin_id:{
-  type: Schema.Types.ObjectId,
-     ref:'User',
-     required: true,
+  type: Schema.ObjectId, auto: true 
 
 },
   

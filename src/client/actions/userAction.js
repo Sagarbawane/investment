@@ -56,12 +56,10 @@ export const startRegisterUser = (formData, redirect) => {
   console.log(formData)
   return (dispatch) => {
     axios
-      .post("/client/register", formData,{
-        headers: {
-          auth: localStorage.getItem("authToken")
-        }})
+      .post("/client/register", formData)
       .then((response) => {
         if (response.data.hasOwnProperty("errors")) {
+          console.log(response.data)
           Swal.fire({
             icon: "error",
             title: "Oops...",

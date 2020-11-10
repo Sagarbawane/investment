@@ -9,7 +9,7 @@ const { authenticateUser } = require("../Middlewares/authenticate");
 
 const router = express.Router();
 
-router.post("/api/client/register",authenticateUser, clientController.register);
+router.post("/api/client/register", clientController.register);
 router.post("/api/client/login", clientController.login);
 router.get("/api/client/account", authenticateUser, clientController.account);
 router.get("/api/client/list",authenticateUser, clientController.list);

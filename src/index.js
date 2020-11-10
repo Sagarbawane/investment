@@ -21,21 +21,26 @@ store.subscribe(() => {
   console.log(store.getState());
 });
 
+
+
 if (localStorage.getItem("authToken")) {
-  console.log("authtoken");
+  
   store.dispatch(startGetUser());
 }
 
+
 if (localStorage.getItem("authToken")) {
-    console.log("authtoken");
+
     store.dispatch(startGetTotolUser());
+  }else{
+    window.location.href ='/signup';
   }
   if (localStorage.getItem("authToken")) {
-    console.log("authtoken");
+   
     store.dispatch(startGetInvestment());
   }
   if (localStorage.getItem("authToken")) {
-    console.log("authtoken");
+ 
     store.dispatch(startGetWithdrawal());
   }
 
